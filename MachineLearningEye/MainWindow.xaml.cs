@@ -32,22 +32,22 @@ namespace RefreshDemo
         //---------------------------------------------------------------------
         //MotionSensorFunc.dll
         //---------------------------------------------------------------------
-        [DllImport("MotionSensorFunc.dll")]
+        [DllImport("Primado2Monitor.dll")]
         private extern static bool Initialize();
 
-        [DllImport("MotionSensorFunc.dll")]
+        [DllImport("Primado2Monitor.dll")]
         private extern static void Finilize();
 
-        [DllImport("MotionSensorFunc.dll")]
+        [DllImport("Primado2Monitor.dll")]
         private extern static bool Start(string SpindleComName, string MotionComName);
 
-        [DllImport("MotionSensorFunc.dll")]
+        [DllImport("Primado2Monitor.dll")]
         private extern static void Stop();
 
-        [DllImport("MotionSensorFunc.dll")]
+        [DllImport("Primado2Monitor.dll")]
         private extern static int GetData(IntPtr Data, int DataSize);
 
-        [DllImport("MotionSensorFunc.dll")]
+        [DllImport("Primado2Monitor.dll")]
         private extern static int GetError();
 
         //---------------------------------------------------------------------

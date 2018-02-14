@@ -110,10 +110,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MotionSensorFunc\MotionSensorFunc\MotionSensorFunc.vcxproj">
-      <Project>{906856f1-85d4-46da-968b-95ca09848aac}</Project>
-      <Name>MotionSensorFunc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SignalReporter\SignalReporter\SignalReporter.vcxproj">
       <Project>{740cfed6-c509-46f5-91d1-ead5fc453958}</Project>
       <Name>NotifyDeviceFunc</Name>
