@@ -88,11 +88,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;SVMINTELIGENCE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;SVMCORE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\opencv245\modules\highgui\include;..\..\opencv245\modules\ml\include;..\..\opencv245\modules\video\include;..\..\opencv245\modules\imgproc\include;..\..\opencv245\modules\core\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\opencv245\build\x86\vc10\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_highgui245d.lib;opencv_core245d.lib;opencv_ml245d.lib;opencv_video245d.lib;opencv_imgproc245d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -102,12 +105,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;SVMCORE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\user\work\spindle_control\opencv245\modules\highgui\include;C:\Users\user\work\spindle_control\opencv245\modules\ml\include;C:\Users\user\work\spindle_control\opencv245\modules\video\include;C:\Users\user\work\spindle_control\opencv245\modules\imgproc\include;C:\Users\user\work\spindle_control\opencv245\modules\core\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\opencv245\modules\highgui\include;..\..\opencv245\modules\ml\include;..\..\opencv245\modules\video\include;..\..\opencv245\modules\imgproc\include;..\..\opencv245\modules\core\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\user\work\spindle_control\opencv245\build\x64\vc10\lib;C:\opencv245\build\x64\vc10\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\opencv245\build\x64\vc10\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>opencv_highgui245d.lib;opencv_core245d.lib;opencv_ml245d.lib;opencv_video245d.lib;opencv_imgproc245d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -119,13 +122,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;SVMINTELIGENCE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;SVMCORE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\opencv245\modules\highgui\include;..\..\opencv245\modules\ml\include;..\..\opencv245\modules\video\include;..\..\opencv245\modules\imgproc\include;..\..\opencv245\modules\core\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\opencv245\build\x86\vc10\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_highgui245.lib;opencv_core245.lib;opencv_ml245.lib;opencv_video245.lib;opencv_imgproc245.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -136,13 +142,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;SVMINTELIGENCE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;SVMCORE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\opencv245\modules\highgui\include;..\..\opencv245\modules\ml\include;..\..\opencv245\modules\video\include;..\..\opencv245\modules\imgproc\include;..\..\opencv245\modules\core\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\opencv245\build\x64\vc10\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_highgui245.lib;opencv_core245.lib;opencv_ml245.lib;opencv_video245.lib;opencv_imgproc245.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
