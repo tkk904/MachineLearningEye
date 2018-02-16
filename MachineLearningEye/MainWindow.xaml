@@ -29,7 +29,9 @@
             <ComboBox Margin="9,10,1,10" x:Name="PrimadoPortName" Width="120" SelectionChanged="PrimadoPortName_SelectionChanged"/>
             <Label Margin="9,10,1,10" Content="TSND : "/>
             <ComboBox Margin="9,10,1,10" x:Name="TSNDPortName" Width="120" SelectionChanged="TSNDPortName_SelectionChanged"/>
-            <Button  Margin="100,10,1,10"  x:Name="OscilloStart" Content="Start" Width="75" Click="OscilloStart_Click" />
+            <Button  Margin="80,10,1,10"  x:Name="OscilloStart" Content="Start" Width="75" Click="OscilloStart_Click" />
+            <Button  Margin="20,10,1,10"  x:Name="OscilloRecord" Content="Record" Width="75" Click="OscilloRecord_Click" />
+            <Button  Margin="20,10,1,10"  x:Name="OscilloPlay" Content="Play" Width="75" Click="OscilloPlay_Click" />
         </WrapPanel>
         <Grid >
             <oxy:PlotView Model="{Binding PlotModel}"/>

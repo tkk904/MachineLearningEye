@@ -353,5 +353,15 @@ namespace RefreshDemo
                 stop_core();
             }
         }
+
+        private void OscilloRecord_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OscilloPlay_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
