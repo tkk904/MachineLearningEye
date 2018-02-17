@@ -109,13 +109,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;SVMCORE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\opencv245\modules\highgui\include;..\..\opencv245\modules\ml\include;..\..\opencv245\modules\video\include;..\..\opencv245\modules\imgproc\include;..\..\opencv245\modules\core\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\opencv2413\build\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\..\opencv245\build\x64\vc10\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_highgui245d.lib;opencv_core245d.lib;opencv_ml245d.lib;opencv_video245d.lib;opencv_imgproc245d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\opencv2413\build\x64\vc14\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_highgui2413d.lib;opencv_core2413d.lib;opencv_ml2413d.lib;opencv_video2413d.lib;opencv_imgproc2413d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -147,15 +147,15 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;SVMCORE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\opencv245\modules\highgui\include;..\..\opencv245\modules\ml\include;..\..\opencv245\modules\video\include;..\..\opencv245\modules\imgproc\include;..\..\opencv245\modules\core\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\opencv2413\build\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\..\opencv245\build\x64\vc10\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_highgui245.lib;opencv_core245.lib;opencv_ml245.lib;opencv_video245.lib;opencv_imgproc245.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\opencv2413\build\x64\vc14\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_highgui2413.lib;opencv_core2413.lib;opencv_ml2413.lib;opencv_video2413.lib;opencv_imgproc2413.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

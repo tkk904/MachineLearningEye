@@ -15,7 +15,7 @@ using tstring = std::basic_string<TCHAR>;
 
 extern "C" {
 	SVMCORE_API void Training();
-	SVMCORE_API int Predict(float* data, int datasize);
+	SVMCORE_API int Predict(float a,float b, int datasize);
 	SVMCORE_API void ClearDefectFlg();
 }
 
