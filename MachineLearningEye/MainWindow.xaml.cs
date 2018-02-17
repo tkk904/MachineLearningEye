@@ -39,7 +39,7 @@ namespace RefreshDemo
         private extern static void Finilize();
 
         [DllImport("Primado2Monitor.dll")]
-        private extern static bool Start(string SpindleComName, string MotionComName);
+        private extern static bool Start(string SpindleComName, string MotionComName, string DatFileName);
 
         [DllImport("Primado2Monitor.dll")]
         private extern static void Stop();
@@ -49,6 +49,9 @@ namespace RefreshDemo
 
         [DllImport("Primado2Monitor.dll")]
         private extern static int GetError();
+
+        [DllImport("Primado2Monitor.dll")]
+        private extern static void Play(string filename);
 
         //---------------------------------------------------------------------
         //SignalReporter.dll
@@ -62,9 +65,22 @@ namespace RefreshDemo
         [DllImport("SignalReporter.dll")]
         private extern static void Notify(int time);
 
+        //---------------------------------------------------------------------
+        //SVMCore.dll
+        //---------------------------------------------------------------------
+        [DllImport("SVMCore.dll")]
+        private extern static void Training();
+
+        [DllImport("SVMCore.dll")]
+//        private extern static int Predict(IntPtr Data, int Datasize);
+        private extern static int Predict(float a,float b, int Datasize);
+
+        [DllImport("SVMCore.dll")]
+        private extern static void ClearDefectFlg();
+
         public PlotModel PlotModel { get; set; }
         
-        const int MAX_DATA_COUNT = 4;
+        const int MAX_DATA_COUNT = 8;
         const int X_DISPLAY_RANGE = 20;
         const int THREAD_SLEEP_TIME = 100;
         const double DX = (double)(THREAD_SLEEP_TIME) / 1000;
@@ -100,6 +116,9 @@ namespace RefreshDemo
 
             //DLL　初期化
             Initialize();
+
+            //SVM Training
+            Training();
 
             //Demo (sin: -1.0 -> 1.0)
             this.PlotModel = CreatePlotModel(-5, 5);
@@ -181,6 +200,15 @@ namespace RefreshDemo
                             this.PlotModel.Series[i].IsVisible = is_visible[i];
                             this.PlotModel.Series[i].TextColor=OxyColor.FromArgb(0,0,0,0);
                         }
+
+                        if(is_stop_resrve){
+                            continue;
+                        }
+                        int predict = PredictCore(ref ary);
+                        if(predict == 1){
+                            stop_core();
+                         }
+
                     }
                     x += DX;
                     PlotModel.InvalidatePlot(true);
@@ -246,6 +274,16 @@ namespace RefreshDemo
 
             gcH.Free();
         }
+
+        private int PredictCore(ref double[] ary)
+        {
+            int len = ary.Length;
+
+            //DLL　データ設定
+            int re = Predict((float)ary[0],(float)ary[1], len);
+            return re;
+        }
+
 
         private void InitializeControl()
         {
@@ -349,19 +387,25 @@ namespace RefreshDemo
         {
             if(primado_name.Length > 0 && tsdn_name.Length > 0){
                 //DLL　動作開始
-                start_drill_monitor = Start(primado_name, tsdn_name);
+                start_drill_monitor = Start(primado_name, tsdn_name,"");
                 stop_core();
             }
         }
 
         private void OscilloRecord_Click(object sender, RoutedEventArgs e)
         {
-
+            if(primado_name.Length > 0 && tsdn_name.Length > 0){
+                //DLL　動作開始
+                string dat_file_name = "Sample001.dat";
+                start_drill_monitor = Start(primado_name, tsdn_name, dat_file_name);
+                stop_core();
+            }
         }
 
         private void OscilloPlay_Click(object sender, RoutedEventArgs e)
         {
-
+            string dat_file_name = "Sample001.dat";
+            Play(dat_file_name);
         }
     }
 }

@@ -110,10 +110,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SignalReporter\SignalReporter\SignalReporter.vcxproj">
-      <Project>{740cfed6-c509-46f5-91d1-ead5fc453958}</Project>
-      <Name>NotifyDeviceFunc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\oxyplot\OxyPlot.OpenXml\OxyPlot.OpenXml.csproj">
       <Project>{bb4fa452-a96a-4c47-aa65-7e88f6fae873}</Project>
       <Name>OxyPlot.OpenXml</Name>

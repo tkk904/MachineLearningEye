@@ -16,7 +16,6 @@
                 <ComboBoxItem Content="5" />
                 <ComboBoxItem Content="6" />
                 <ComboBoxItem Content="7" />
-                <ComboBoxItem Content="8" />
             </ComboBox>
             <Label Margin="9,15,1,10" Content="Scale : "/>
             <TextBox x:Name="ScaleTextBox" Margin="1,15,11,10" Height="23" TextWrapping="Wrap" Text="{Binding Scale}" Width="120"/>
