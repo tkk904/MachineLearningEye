@@ -238,6 +238,8 @@ bool CSerialPort::WriteComm(const void* pData, DWORD nBytes)
 	DWORD nErr;
 	COMSTAT status;
 	if (GetLastError() == ERROR_IO_PENDING) {
+		return true;
+/*
 		DWORD nBytesSent = 0;
 		while (!GetOverlappedResult(m_hComDev, &m_osWrite, &nLength, TRUE)) {
 			nErr = GetLastError();
@@ -249,6 +251,9 @@ bool CSerialPort::WriteComm(const void* pData, DWORD nBytes)
 				ClearCommError(m_hComDev, &nErr, &status);
 				break;
 			}
+			if (!IsConnected()) {
+				return false;
+			}
 		}
 		nBytesSent += nLength;
 		if (nBytesSent == nBytes) {
@@ -257,6 +262,7 @@ bool CSerialPort::WriteComm(const void* pData, DWORD nBytes)
 		}
 		TRACE("多分タイムアウト %ld bytes\n", nBytesSent);
 		return false;
+*/
 	}
 	else {
 		ClearCommError(m_hComDev, &nErr, &status);
