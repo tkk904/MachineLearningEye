@@ -22,5 +22,53 @@ namespace MachineLearningEye.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("sample")]
+        public string record_file_name {
+            get {
+                return ((string)(this["record_file_name"]));
+            }
+            set {
+                this["record_file_name"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("sample")]
+        public string play_file_name {
+            get {
+                return ((string)(this["play_file_name"]));
+            }
+            set {
+                this["play_file_name"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".dat")]
+        public string extention {
+            get {
+                return ((string)(this["extention"]));
+            }
+            set {
+                this["extention"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string record_folder {
+            get {
+                return ((string)(this["record_folder"]));
+            }
+            set {
+                this["record_folder"] = value;
+            }
+        }
     }
 }

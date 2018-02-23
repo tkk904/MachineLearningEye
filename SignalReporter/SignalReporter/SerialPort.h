@@ -2,8 +2,8 @@
 //
 //
 
-#ifndef	_SERIALPORT_H_
-#define	_SERIALPORT_H_
+#ifndef	SERIALPORT_H_
+#define	SERIALPORT_H_
 
 class CSerialPort
 {
@@ -12,6 +12,11 @@ class CSerialPort
 	DWORD m_nThreadID;
 	HANDLE m_hWatchThread;
 	OVERLAPPED m_osRead, m_osWrite;
+	//
+	struct {
+		void* parameter;
+		void(*handler)(void*,const void*,unsigned int);
+	} m_receive;
 public:
 	enum {
 		NONE = 0,
@@ -27,7 +32,9 @@ public:
 	virtual void Close();
 	virtual long Read(void* pData,long nBytes);
 	virtual long Write(const void* pData, long nBytes);
-//	static void EnumCommPorts(CStringArray& array);
+	//static void EnumCommPorts(CStringArray& array);
+	//
+	void ReceiveHandler(void(*handler)(void*, const void*, unsigned int), void*);
 	//
 	virtual ~CSerialPort();
 	CSerialPort();
@@ -40,5 +47,5 @@ private:
 	bool WriteComm(const void* pData, DWORD nBytes);
 };
 
-#endif	// _SERIALPORT_H_
+#endif	// SERIALPORT_H_
 

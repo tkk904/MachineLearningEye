@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace RefreshDemo
+namespace MachineLearningEye
 {
     using System.ComponentModel;
     using System.Threading;
@@ -79,9 +79,12 @@ namespace RefreshDemo
         private extern static void ClearDefectFlg();
 
         public PlotModel PlotModel { get; set; }
-        
+
+        public static string record_file_name;
+        public static string play_file_name;
+
         const int MAX_DATA_COUNT = 8;
-        const int X_DISPLAY_RANGE = 20;
+        const int X_DISPLAY_RANGE = 10;
         const int THREAD_SLEEP_TIME = 100;
         const double DX = (double)(THREAD_SLEEP_TIME) / 1000;
         const double k = X_DISPLAY_RANGE;
@@ -98,6 +101,7 @@ namespace RefreshDemo
         private string primado_name="";
         private string tsdn_name = "";
         private bool start_drill_monitor = false;
+        private bool is_record = false;
 
         //---------------------------------------------------------------------
         //シリアルポートの列挙は以下で可能
@@ -142,7 +146,7 @@ namespace RefreshDemo
                         if (count < THREAD_SLEEP_TIME) {
                              stop_x = x;
                         }
-                        if (count > 1500) {
+                        if (count > 10000) {
                             is_stop = true;
                         }
                     };
@@ -204,6 +208,11 @@ namespace RefreshDemo
                         if(is_stop_resrve){
                             continue;
                         }
+                        
+                        if(is_record){ 
+                            continue;
+                        }
+
                         int predict = PredictCore(ref ary);
                         if(predict == 1){
                             stop_core();
@@ -304,6 +313,20 @@ namespace RefreshDemo
                     this.data_buf[i,j] = -1;
                 }
             }
+
+            for (int i = 3; i < MAX_DATA_COUNT; ++i)
+            {
+                is_visible[i] = false;
+            }
+
+            scale[0] = 0.0001;
+            offset[0] = -4;
+            
+            scale[1] = 4;
+            offset[1] = -2;
+
+            scale[2] = 20;
+            offset[2] = 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -342,8 +365,11 @@ namespace RefreshDemo
 
         private void NotifyDeviceName_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Notify test
-            is_device_start = Start(NotifyDeviceName.SelectedItem.ToString());
+            if (NotifyDeviceName.SelectedItem.ToString().Length > 0 )
+            {
+                //Notify test
+                is_device_start = Start(NotifyDeviceName.SelectedItem.ToString());
+            }
         }
         
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -361,6 +387,7 @@ namespace RefreshDemo
 
             //
             is_stop_resrve = !is_stop_resrve;
+            is_record = false;
             if (is_stop_resrve) {
                 tickcount = Environment.TickCount;
                 //デバイスのポートがOpenしていたら通知処理を実行します。
@@ -370,6 +397,7 @@ namespace RefreshDemo
             } else {
                 tickcount = 0;
                 is_stop = false;
+                ClearDefectFlg();
             }
         }
 
@@ -388,7 +416,9 @@ namespace RefreshDemo
             if(primado_name.Length > 0 && tsdn_name.Length > 0){
                 //DLL　動作開始
                 start_drill_monitor = Start(primado_name, tsdn_name,"");
+                //start_drill_monitor = true;
                 stop_core();
+                is_record = true;
             }
         }
 
@@ -396,7 +426,7 @@ namespace RefreshDemo
         {
             if(primado_name.Length > 0 && tsdn_name.Length > 0){
                 //DLL　動作開始
-                string dat_file_name = "Sample001.dat";
+                string dat_file_name = Properties.Settings.Default.record_file_name + Properties.Settings.Default.extention ;
                 start_drill_monitor = Start(primado_name, tsdn_name, dat_file_name);
                 stop_core();
             }
@@ -404,8 +434,21 @@ namespace RefreshDemo
 
         private void OscilloPlay_Click(object sender, RoutedEventArgs e)
         {
-            string dat_file_name = "Sample001.dat";
+            start_drill_monitor = true;
+            stop_core();
+            string dat_file_name = Properties.Settings.Default.play_file_name;
             Play(dat_file_name);
+        }
+
+        private void SettingDialog_Click(object sender, RoutedEventArgs e)
+        {
+            var settings = new SettingWindow();
+            settings.ShowDialog();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Save();
         }
     }
 }

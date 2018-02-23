@@ -4,9 +4,6 @@
 
 #include "stdafx.h"
 #include "serialport.h"
-//#include <afxcoll.h>
-#include <atlstr.h>
-
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -24,6 +21,9 @@ CSerialPort::CSerialPort()
 	m_osRead.Offset = 0;
 	m_osRead.OffsetHigh = 0;
 	m_osWrite = m_osRead;
+	//
+	m_receive.handler = NULL;
+	m_receive.parameter = NULL;
 }
 CSerialPort::~CSerialPort()
 {
@@ -35,6 +35,13 @@ CSerialPort::~CSerialPort()
 		CloseHandle(m_osWrite.hEvent);
 	}
 }
+void CSerialPort::ReceiveHandler(void(*handler)(void*, const void*, unsigned int), void* parameter)
+{
+	m_receive.handler = NULL;
+	m_receive.parameter = parameter;
+	m_receive.handler = handler;
+}
+
 void CSerialPort::Close()
 {
 	if( m_bConnected ){
@@ -66,9 +73,12 @@ bool CSerialPort::Open(LPCTSTR szPort,DWORD nBps,int nMode)
 	//
 	// デバイス名の頭に "\\.\"を付けなければなりません。
 	// これがないとCOM10以上は開けません。
-	CString sPortName = _T("\\\\.\\");
-	sPortName += szPort;
-	m_hComDev = CreateFile(sPortName,GENERIC_READ | GENERIC_WRITE,
+	TCHAR portname[256];
+	strcpy_s(portname, ("\\\\.\\"));
+	strcat_s(portname, sizeof(portname), szPort);
+//	CString sPortName = _T("\\\\.\\");
+//	sPortName += szPort;
+	m_hComDev = CreateFile(portname,GENERIC_READ | GENERIC_WRITE,
 					0,
 					NULL,
 					OPEN_EXISTING,
@@ -97,6 +107,10 @@ bool CSerialPort::Open(LPCTSTR szPort,DWORD nBps,int nMode)
 		CloseHandle( m_hComDev );
 		return false;
 	}
+
+	EscapeCommFunction(m_hComDev, SETDTR);
+	return true;
+
 	// create thread to watch for an event.
 	m_hWatchThread = CreateThread( (LPSECURITY_ATTRIBUTES)NULL,
 							0,
@@ -186,6 +200,7 @@ bool CSerialPort::SetupConnection(DWORD nBps, int nMode)
 }
 DWORD CSerialPort::WatchProc(void* ptr)
 {
+	Sleep(1000);
 	CSerialPort* pObj = (CSerialPort*)ptr;
 	OVERLAPPED os;
 	memset(&os,0,sizeof(os));
@@ -199,19 +214,19 @@ DWORD CSerialPort::WatchProc(void* ptr)
 	}
 	//
 	DWORD nEventMask;
-	while( pObj->IsConnected() ){
+	while (pObj->IsConnected()) {
 		nEventMask = 0;
-		WaitCommEvent(pObj->m_hComDev,&nEventMask,NULL );
-		if( (nEventMask&EV_RXCHAR) == EV_RXCHAR){
-			while( !pObj->Receive() ){
-				Sleep(100);
-				if( !pObj->IsConnected() ){
+		WaitCommEvent(pObj->m_hComDev, &nEventMask, NULL);
+		if ((nEventMask&EV_RXCHAR) == EV_RXCHAR) {
+			while (!pObj->Receive()) {
+				Sleep(200);
+				if (!pObj->IsConnected()) {
 					goto abort;
 				}
 			}
 		}
 	}
-abort:;
+	abort:;
 	CloseHandle(os.hEvent);
 	pObj->m_nThreadID = 0;
 	pObj->m_hWatchThread = NULL;
@@ -221,79 +236,96 @@ abort:;
 bool CSerialPort::WriteComm(const void* pData, DWORD nBytes)
 {
 	DWORD nLength = 0;
-	if( WriteFile( m_hComDev,pData,nBytes,&nLength,&m_osWrite) ){
+	if (WriteFile(m_hComDev, pData, nBytes, &nLength, &m_osWrite)) {
 		return true;
 	}
 	// error
 	DWORD nErr;
 	COMSTAT status;
-	if( GetLastError() == ERROR_IO_PENDING ){
+	if (GetLastError() == ERROR_IO_PENDING) {
+		return true;
+/*
 		DWORD nBytesSent = 0;
-		while(!GetOverlappedResult(m_hComDev,&m_osWrite,&nLength,TRUE)){
+		while (!GetOverlappedResult(m_hComDev, &m_osWrite, &nLength, TRUE)) {
 			nErr = GetLastError();
-			if( nErr != ERROR_IO_INCOMPLETE ){
+			if (nErr != ERROR_IO_INCOMPLETE) {
 				nBytesSent += nLength;
-			} else {
-//				TRACE( "comm write error %u\n",nErr );
-				ClearCommError(m_hComDev,&nErr,&status);
+			}
+			else {
+				//				TRACE( "comm write error %u\n",nErr );
+				ClearCommError(m_hComDev, &nErr, &status);
 				break;
+			}
+			if (!IsConnected()) {
+				return false;
 			}
 		}
 		nBytesSent += nLength;
-		if( nBytesSent != nBytes ){
-//			TRACE( "多分タイムアウト %ld bytes\n",nBytesSent );
-		} else {
-//			TRACE( "%ld bytes 書き込み\n", nBytesSent );
+		if (nBytesSent == nBytes) {
+			//			TRACE( "%ld bytes 書き込み\n", nBytesSent );
 			return true;
 		}
-	} else {
-		ClearCommError(m_hComDev,&nErr,&status);
-		if( 0 < nErr ){
-//			TRACE( "comm write error %u\n", nErr );
+		TRACE("多分タイムアウト %ld bytes\n", nBytesSent);
+		return false;
+*/
+	}
+	else {
+		ClearCommError(m_hComDev, &nErr, &status);
+		if (0 < nErr) {
+//			TRACE("comm write error %u\n", nErr);
 		}
 	}
 	return false;
 }
-long CSerialPort::ReadComm(void* pData,long nBytes)
+long CSerialPort::ReadComm(void* pData, long nBytes)
 {
 	COMSTAT status;
 	DWORD nErr;
-	ClearCommError(m_hComDev,&nErr,&status);
-	DWORD nLength = min( (DWORD)nBytes, status.cbInQue );
-	if( nLength == 0 ) return 0;
+	ClearCommError(m_hComDev, &nErr, &status);
+	DWORD nLength = min((DWORD)nBytes, status.cbInQue);
+	if (nLength == 0) return 0;
 	//
-	if( ReadFile(m_hComDev,pData,nLength,&nLength,&m_osRead) ){
+	if (ReadFile(m_hComDev, pData, nLength, &nLength, &m_osRead)) {
 		return nLength;
 	}
 	// error
-	if( GetLastError() == ERROR_IO_PENDING ){
-//		TRACE( "comm read io pending\n" );
-		while( !GetOverlappedResult(m_hComDev,&m_osRead,&nLength,TRUE) ){
+	if (GetLastError() == ERROR_IO_PENDING) {
+		//		TRACE( "comm read io pending\n" );
+		while (!GetOverlappedResult(m_hComDev, &m_osRead, &nLength, TRUE)) {
 			nErr = GetLastError();
-			if( nErr == ERROR_IO_INCOMPLETE ){
-			} else {
-//				TRACE( "comm read error %u\n", nErr );
-				ClearCommError(m_hComDev,&nErr,&status);
+			if (nErr == ERROR_IO_INCOMPLETE) {
+			}
+			else {
+//				TRACE("comm read error %u\n", nErr);
+				ClearCommError(m_hComDev, &nErr, &status);
 				return -1;
 			}
 		}
 		return nLength;
-	} else {
-		ClearCommError( m_hComDev, &nErr, &status );
-//		TRACE( "error %u\n", nErr );
+	}
+	else {
+		ClearCommError(m_hComDev, &nErr, &status);
+//		TRACE("error %u\n", nErr);
 	}
 	return -1;
 }
 long CSerialPort::Write(const void* pData, long nBytes)
 {
-	return WriteComm(pData,nBytes) ? nBytes : -1;
+	return WriteComm(pData, nBytes) ? nBytes : -1;
 }
 long CSerialPort::Read(void* pData, long nBytes)
 {
-	return ReadComm(pData,nBytes);
+	return ReadComm(pData, nBytes);
 }
 bool CSerialPort::Receive()
 {
+	unsigned char buffer[1024];
+	long n;
+	while (0 < (n = Read(buffer, sizeof(buffer)))) {
+		if (m_receive.handler != NULL) {
+			m_receive.handler(m_receive.parameter, buffer, n);
+		}
+	}
 	return true;
 }
 
@@ -352,5 +384,10 @@ void CSerialPort::EnumCommPorts(CStringArray& list)
 		index++;
 	}
 	SetupDiDestroyDeviceInfoList(hDevInfo);	//	デバイス情報セットを解放
+}
+
+void EnumSerialPort(CStringArray& list)
+{
+	CSerialPort::EnumCommPorts(list);
 }
 */

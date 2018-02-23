@@ -1,7 +1,18 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MachineLearningEye.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="record_file_name" Type="System.String" Scope="User">
+      <Value Profile="(Default)">sample</Value>
+    </Setting>
+    <Setting Name="play_file_name" Type="System.String" Scope="User">
+      <Value Profile="(Default)">sample</Value>
+    </Setting>
+    <Setting Name="extention" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.dat</Value>
+    </Setting>
+    <Setting Name="record_folder" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
 </SettingsFile>

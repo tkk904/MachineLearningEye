@@ -1,11 +1,18 @@
-﻿<Window x:Class="RefreshDemo.MainWindow"
+﻿<Window x:Class="MachineLearningEye.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:oxy="http://oxyplot.org/wpf"
-        Title=" Demo " Height="500" Width="760"
-        KeyDown="Window_KeyDown">
+        Title=" Demo " Height="520" Width="760"
+        KeyDown="Window_KeyDown" Closed="Window_Closed">
     <!-- Refresh by calling InvalidatePlot on the PlotModel from a non-UI thread -->
     <DockPanel>
+        <WrapPanel DockPanel.Dock="Top" Height="15">
+            <TextBlock x:Name="SettingDialog" Margin="690,0,0,0" Width="45"  >
+                <Hyperlink Click="SettingDialog_Click">
+                    Settings
+                </Hyperlink>
+            </TextBlock>
+        </WrapPanel> 
         <WrapPanel DockPanel.Dock="Top" Height="100">
             <ComboBox Margin="9,15,11,10" x:Name="DataIndex"  Height="23" SelectionChanged="DataIndex_SelectionChanged" >
                 <ComboBoxItem Content="0" />
